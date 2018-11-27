@@ -1,21 +1,23 @@
 
 import React, {Component} from 'react';
-import {Platform , FlatList, View} from 'react-native';
+import {Platform , FlatList, Linking, Dimensions, View, TouchableOpacity} from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import {Container, Header, Body, Left,Right, Button, Picker, Item, Input, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class LocalList extends Component {
     /**
-     * constructor for person profile
+     * constructor for local list
      */
     constructor() {
         super();
         this.state = {
             localList:[],
-            iconName:"remove-circle"
+            iconName:"remove-circle",
+            searchContent: "",
+            searchLocation: "",
         }
-        this.onPress = this.onPress.bind(this);
+        // this.onPress = this.onPress.bind(this);
     }
     /**
      * function to fetch data from github api
@@ -25,29 +27,38 @@ export default class LocalList extends Component {
         // if(this.props.navigation.getParam('selectedList')){
         //     listPassed =
         // }
-        console.log(this.props.navigation.getParam('selectedList'));
-
+        let tempContent = 'restaurants';
+        if(this.props.navigation.getParam('searchContent')){
+            tempContent = this.props.navigation.getParam('searchContent')
+        }
+        let tempLocation = '60612';
+        if(this.props.navigation.getParam('searchLocation')){
+            tempLocation = this.props.navigation.getParam('searchLocation')
+        }
+        console.log("3888888")
+        console.log(tempLocation);
         this.setState({
-            localList: this.props.navigation.getParam('selectedList')
+            localList: this.props.navigation.getParam('selectedList'),
+            searchContent: tempContent,
+            searchLocation: tempLocation,
         });
-        console.log(this.state.localList);
-    }
 
+    }
     onPress() {
-        console.log("here");
-        this.props.navigation.replace('Restaurants', {'selectedList': this.state.localList});
+
+        this.props.navigation.replace('Restaurants', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation });
     }
     delete(item) {
-        console.log(item);
-        // this.state.localList.pop(item);
         this.state.localList.splice(this.state.localList.indexOf(item), 1 );
-        console.log(this.state.localList);
-        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList});
+        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation });
     }
-
+    showRestaurantInfo(){
+        // Linking.openURL(this.state.localList[0].url);
+        this.props.navigation.push('RestaurantDetail', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'selectedID':this.state.localList[0].id});
+    }
     render() {
         return (
-            <View>
+            <View >
                 <Header>
                     <Left>
                         <Icon
@@ -62,20 +73,30 @@ export default class LocalList extends Component {
 
                     </Right>
                 </Header>
-                <List>
-                    <FlatList
-                        data={this.state.localList}
-                        keyExtractor={item => item.id}
-                        renderItem={({ item }) => (
-                            <ListItem
-                                title ={item.name}
-                                avatar={{uri: item.image_url}}
-                                onPress={()=>this.delete(item)}
-                                rightIcon={{name: this.state.iconName}}
+                <View style={{flexDirection: 'column', justifyContent: 'space-between',alignItems:'center'}}>
+
+                    <View style={{ height: (Dimensions.get('window').height-220), width:Dimensions.get('window').width}}>
+                        <List >
+                            <FlatList
+                                data={this.state.localList}
+                                keyExtractor={item => item.id}
+                                renderItem={({ item }) => (
+                                    <ListItem
+                                        title ={item.name}
+                                        avatar={{uri: item.image_url}}
+                                        onPress={()=>this.delete(item)}
+                                        rightIcon={{name: this.state.iconName}}
+                                    />
+                                )}
                             />
-                        )}
-                    />
-                </List>
+                        </List>
+                    </View>
+                    <View style={{ flex:1}}>
+                        <Button rounded primary onPress={() => this.showRestaurantInfo()}>
+                            <Text>Roll the dice!</Text>
+                        </Button>
+                    </View>
+                </View>
             </View>
         );
     }
