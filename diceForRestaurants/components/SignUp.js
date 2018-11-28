@@ -61,7 +61,6 @@ export default class SignUp extends Component {
         return <View>
             <Button onPress={this.onLoginPress.bind(this)} title={'Login'} ></Button>
             <Button onPress={this.onSignupPress.bind(this)} title='Sign Up'/>
-            <Text>Button</Text>
         </View>
     }
     render(){
