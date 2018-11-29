@@ -39,7 +39,7 @@ export default class Restaurants extends Component {
             tempList = this.props.navigation.getParam('selectedList');
         }
         console.log(this.props.navigation.getParam('selectedList'));
-        axios.get(`https://api.yelp.com/v3/businesses/search?term=`+tempContent+`&location=`+tempContent)
+        axios.get(`https://api.yelp.com/v3/businesses/search?term=`+tempContent+`&location=`+tempLocation)
             .then((response) => {
                 this.setState({
                     searchResult: response.data.businesses,
