@@ -8,7 +8,6 @@ import axios from 'axios';
 
 //reference: https://www.youtube.com/watch?v=9g_73wEbX8E&t=505s
 
-token="FssaySoD_y-Ey_-kuN141a_nedlgL1KXTGw1QeLGmxKyciYFX4-bswEJgVC9lXa1JJep4hr5H0cZ-8p82h2R7mmkuscNz_ST8-ycmS44EqQ2U8PghgFaJVKxtzPqW3Yx";
 
 var {width, height} = Dimensions.get('window');
 export default class RestaurantDetail extends Component {
@@ -26,7 +25,9 @@ export default class RestaurantDetail extends Component {
             restaurantAddress: "",
             restaurantPhotos: [],
         }
-        axios.defaults.headers.common['Authorization'] = "Bearer "+token;
+        axios.defaults.headers.common['Authorization'] = "Bearer "+"FssaySoD_y-Ey_-kuN141a_nedlgL1KXTGw1QeLGmxKyciYFX4-bswEJgVC9lXa1JJep4hr5H0cZ-8p82h2R7mmkuscNz_ST8-ycmS44EqQ2U8PghgFaJVKxtzPqW3Yx";
+        this.renderSection=this.renderSection.bind(this);
+        this.renderSectionOne = this.renderSectionOne.bind(this);
     }
     /**
      * function to fetch data from yelp api
@@ -77,6 +78,7 @@ export default class RestaurantDetail extends Component {
             )
         })
     }
+
     renderSection = () =>{
         return(
             <View style = {{flexDirection:'row', flexWrap: 'wrap', marginTop: 20}}>
@@ -85,6 +87,7 @@ export default class RestaurantDetail extends Component {
             </View>
         )
     }
+
     render() {
         return (
                 <View>

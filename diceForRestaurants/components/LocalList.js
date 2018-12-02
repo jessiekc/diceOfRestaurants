@@ -17,7 +17,9 @@ export default class LocalList extends Component {
             searchContent: "",
             searchLocation: "",
         }
-        // this.onPress = this.onPress.bind(this);
+        this.onPress = this.onPress.bind(this);
+        this.delete = this.delete.bind(this);
+        this.showRestaurantInfo = this.showRestaurantInfo.bind(this);
     }
     /**
      * function to fetch data from github api

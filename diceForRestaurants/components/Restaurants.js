@@ -21,6 +21,10 @@ export default class Restaurants extends Component {
             searchLocation: "",
         }
         axios.defaults.headers.common['Authorization'] = "Bearer "+token;
+        this.add=this.add.bind(this);
+        this.gotoList = this.gotoList.bind(this);
+        this.searchByCategory = this.searchByCategory.bind(this);
+
     }
     /**
      * function to fetch data from yelp api
@@ -92,6 +96,7 @@ export default class Restaurants extends Component {
                             </Item>
                         </View>
                     </View>
+                    
                     <List>
                         <FlatList
                             data={this.state.searchResult}
