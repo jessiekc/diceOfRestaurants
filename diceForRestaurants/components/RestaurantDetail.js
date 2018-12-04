@@ -4,6 +4,7 @@ import { Avatar } from 'react-native-elements';
 import { List, ListItem } from 'react-native-elements';
 import {Container, Header, Body, Left, Right, Button, Picker, Item, Input, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Rating } from 'react-native-ratings';
 import axios from 'axios';
 
 //reference: https://www.youtube.com/watch?v=9g_73wEbX8E&t=505s
@@ -24,6 +25,7 @@ export default class RestaurantDetail extends Component {
             searchLocation: "",
             restaurantAddress: "",
             restaurantPhotos: [],
+            restaurantRate:1,
         }
         axios.defaults.headers.common['Authorization'] = "Bearer "+"FssaySoD_y-Ey_-kuN141a_nedlgL1KXTGw1QeLGmxKyciYFX4-bswEJgVC9lXa1JJep4hr5H0cZ-8p82h2R7mmkuscNz_ST8-ycmS44EqQ2U8PghgFaJVKxtzPqW3Yx";
         this.renderSection=this.renderSection.bind(this);
@@ -49,22 +51,17 @@ export default class RestaurantDetail extends Component {
         if(this.props.navigation.getParam('selectedID')){
             tempID = this.props.navigation.getParam('selectedID');
         }
-        console.log("45");
-        console.log(this.props.navigation.getParam('selectedID'));
         axios.get(`https://api.yelp.com/v3/businesses/`+tempID)
             .then((response) => {
-
                 this.setState({
                     searchResult: response.data,
                     localList: tempList,
                     searchLocation:tempLocation,
                     searchContent: tempContent,
                     restaurantAddress: response.data.location.display_address.toString(),
-                    restaurantPhotos: response.data.photos
+                    restaurantPhotos: response.data.photos,
+                    restaurantRate: response.data.rating
                 });
-                console.log(this.state.searchResult);
-                console.log(this.state.searchResult.location.display_address);
-                console.log(this.state.restaurantAddress);
             });
     }
     renderSectionOne = () =>{
@@ -80,6 +77,7 @@ export default class RestaurantDetail extends Component {
     }
 
     renderSection = () =>{
+
         return(
             <View style = {{flexDirection:'row', flexWrap: 'wrap', marginTop: 20}}>
                 {this.renderSectionOne()}
@@ -90,7 +88,7 @@ export default class RestaurantDetail extends Component {
 
     render() {
         return (
-                <View>
+                <View style={{backgroundColor:"white"}}>
                     <View style={{flexDirection: 'row', paddingTop:20, marginBottom: 10}}>
                         <View style={{flex: 1, alignItems: 'center'}}>
                             <Image
@@ -108,9 +106,9 @@ export default class RestaurantDetail extends Component {
                                 </View>
                                 <View style={{alignItems: 'center'}}>
                                     <Text style={{fontSize: 15, color: 'grey'}}>
-                                        Rating
+                                        Open Now
                                     </Text>
-                                    <Text>{this.state.searchResult.rating}</Text>
+                                    <Text>{(!this.state.searchResult.is_closed).toString()}</Text>
                                 </View>
                                 <View style={{alignItems: 'center'}}>
                                     <Text style={{fontSize: 15, color: 'grey'}}>
@@ -127,12 +125,21 @@ export default class RestaurantDetail extends Component {
                                 </Button>
 
                             </View>
+
                         </View>
                     </View>
                     <View style={{paddingVertical: 10, paddingHorizontal: 10}}>
                         <Text style = {{fontWeight: 'bold'}}>{this.state.searchResult.name}</Text>
                         <Text>{this.state.searchResult.display_phone}</Text>
                         <Text>{this.state.restaurantAddress}</Text>
+                        <Rating
+                            type='star'
+                            ratingColor='#f1c40f'
+                            ratingBackgroundColor='white'
+                            emptyStarColor={'#f1c40f'}
+                            imageSize={20}
+                            startingValue={this.state.restaurantRate}
+                        />
                     </View>
                     {this.renderSection()}
                 </View>

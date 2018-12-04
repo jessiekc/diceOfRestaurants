@@ -16,6 +16,10 @@ export default class LocalList extends Component {
             iconName:"remove-circle",
             searchContent: "",
             searchLocation: "",
+            sortOrder: "",
+            showOpenNow:false,
+            searchPrice:"1",
+
         }
         this.onPress = this.onPress.bind(this);
         this.delete = this.delete.bind(this);
@@ -37,26 +41,38 @@ export default class LocalList extends Component {
         if(this.props.navigation.getParam('searchLocation')){
             tempLocation = this.props.navigation.getParam('searchLocation')
         }
-        console.log("3888888")
-        console.log(tempLocation);
+        let tempOrder = 'best_match';
+        if(this.props.navigation.getParam('sortOrder')){
+            tempOrder = this.props.navigation.getParam('sortOrder')
+        }
+        let tempOpenNow = false;
+        if(this.props.navigation.getParam('showOpenNow')){
+            tempOpenNow = this.props.navigation.getParam('showOpenNow')
+        }
+        let tempPrice = "1";
+        if(this.props.navigation.getParam('searchPrice')){
+            tempPrice = this.props.navigation.getParam('searchPrice')
+        }
         this.setState({
             localList: this.props.navigation.getParam('selectedList'),
             searchContent: tempContent,
             searchLocation: tempLocation,
+            sortOrder: tempOrder,
+            showOpenNow: tempOpenNow,
+            searchPrice: tempPrice
         });
 
     }
     onPress() {
-
-        this.props.navigation.replace('Restaurants', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation });
+        this.props.navigation.replace('Restaurants', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation , 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice });
     }
     delete(item) {
         this.state.localList.splice(this.state.localList.indexOf(item), 1 );
-        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation });
+        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice  });
     }
     showRestaurantInfo(){
-        // Linking.openURL(this.state.localList[0].url);
-        this.props.navigation.push('RestaurantDetail', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'selectedID':this.state.localList[0].id});
+        let randomid=this.state.localList[Math.floor(this.state.localList.length*Math.random())].id;
+        this.props.navigation.push('RestaurantDetail', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'selectedID': randomid, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice });
     }
     render() {
         return (
