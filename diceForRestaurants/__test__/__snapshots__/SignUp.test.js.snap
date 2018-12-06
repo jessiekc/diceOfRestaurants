@@ -1,201 +1,136 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-<View>
+<View
+  accessible={true}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "stretch",
+      "backgroundColor": "rgb(234, 195, 176)",
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "center",
+    }
+  }
+>
   <View
     style={
-      Array [
-        Object {},
-        undefined,
-      ]
+      Object {
+        "alignItems": "center",
+        "flex": 3,
+        "flexDirection": "column",
+        "justifyContent": "center",
+      }
     }
   >
     <Text
+      allowFontScaling={false}
       style={
         Array [
-          Object {},
+          Object {
+            "color": "rgb(221, 97, 97)",
+            "fontSize": 100,
+          },
           undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          Array [
-            Object {
-              "color": "#86939e",
-              "fontSize": 15,
-              "fontWeight": "bold",
-              "marginBottom": 1,
-              "marginLeft": 20,
-              "marginRight": 20,
-              "marginTop": 15,
-            },
-            undefined,
-            undefined,
-          ],
+          Object {
+            "fontFamily": "Ionicons",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
         ]
       }
     >
-      Email
+      
+    </Text>
+    <Text
+      style={
+        Array [
+          Object {
+            "color": "#000",
+            "fontFamily": "System",
+            "fontSize": 16,
+          },
+          Object {
+            "color": "rgb(249, 238, 238)",
+            "fontSize": 23,
+            "textAlign": "center",
+            "width": 400,
+          },
+        ]
+      }
+      uppercase={false}
+    >
+      Welcome to Dice for Restaurant
     </Text>
   </View>
   <View
     style={
       Object {
-        "borderBottomColor": "#bdc6cf",
-        "borderBottomWidth": 1,
-        "marginLeft": 20,
-        "marginRight": 20,
-        "transform": Array [
-          Object {
-            "translateX": 0,
-          },
-        ],
+        "alignItems": "center",
+        "flex": 7,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
       }
     }
   >
-    <TextInput
-      allowFontScaling={true}
-      onChangeText={[Function]}
-      style={
-        Array [
-          Object {
-            "color": "#86939e",
-            "minHeight": 36,
-            "width": 750,
-          },
-          Object {
-            "fontSize": 17.5,
-          },
-          undefined,
-        ]
-      }
-      underlineColorAndroid="transparent"
-      value=""
-    />
-  </View>
-  <View
-    style={
-      Array [
-        Object {},
-        undefined,
-      ]
-    }
-  >
-    <Text
-      style={
-        Array [
-          Object {},
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          Array [
-            Object {
-              "color": "#86939e",
-              "fontSize": 15,
-              "fontWeight": "bold",
-              "marginBottom": 1,
-              "marginLeft": 20,
-              "marginRight": 20,
-              "marginTop": 15,
-            },
-            undefined,
-            undefined,
-          ],
-        ]
-      }
-    >
-      Password
-    </Text>
-  </View>
-  <View
-    style={
-      Object {
-        "borderBottomColor": "#bdc6cf",
-        "borderBottomWidth": 1,
-        "marginLeft": 20,
-        "marginRight": 20,
-        "transform": Array [
-          Object {
-            "translateX": 0,
-          },
-        ],
-      }
-    }
-  >
-    <TextInput
-      allowFontScaling={true}
-      onChangeText={[Function]}
-      style={
-        Array [
-          Object {
-            "color": "#86939e",
-            "minHeight": 36,
-            "width": 750,
-          },
-          Object {
-            "fontSize": 17.5,
-          },
-          undefined,
-        ]
-      }
-      underlineColorAndroid="transparent"
-      value=""
-    />
-  </View>
-  <View>
     <View
-      accessibilityRole="button"
-      accessibilityStates={Array []}
-      accessible={true}
-      isTVSelectable={true}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "opacity": 1,
+          "backgroundColor": "rgba(255,255,255,0.2)",
+          "borderRadius": 6,
+          "marginBottom": 20,
+          "paddingHorizontal": 10,
         }
       }
     >
-      <View
+      <TextInput
+        allowFontScaling={true}
+        keyboardType="email-address"
+        onChangeText={[Function]}
+        placeholder="Enter your email"
         style={
-          Array [
-            Object {},
-          ]
-        }
-      >
-        <Text
-          style={
-            Array [
-              Object {
-                "color": "#007AFF",
-                "fontSize": 18,
-                "padding": 8,
-                "textAlign": "center",
-              },
-            ]
+          Object {
+            "height": 45,
+            "width": 280,
           }
-        >
-          Login
-        </Text>
-      </View>
+        }
+        textContentType="emailAddress"
+        underlineColorAndroid="transparent"
+        value=""
+      />
     </View>
     <View
-      accessibilityRole="button"
-      accessibilityStates={Array []}
+      style={
+        Object {
+          "backgroundColor": "rgba(255,255,255,0.2)",
+          "borderRadius": 6,
+          "marginBottom": 20,
+          "paddingHorizontal": 10,
+        }
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        onChangeText={[Function]}
+        placeholder="Enter your password"
+        secureTextEntry={true}
+        style={
+          Object {
+            "height": 45,
+            "width": 280,
+          }
+        }
+        underlineColorAndroid="transparent"
+        value=""
+      />
+    </View>
+    <View
       accessible={true}
       isTVSelectable={true}
       onResponderGrant={[Function]}
@@ -206,33 +141,134 @@ exports[`renders correctly 1`] = `
       onStartShouldSetResponder={[Function]}
       style={
         Object {
+          "alignItems": "center",
+          "backgroundColor": "rgb(221, 97, 97)",
+          "borderRadius": 6,
+          "height": 45,
+          "justifyContent": "center",
           "opacity": 1,
+          "width": 300,
+        }
+      }
+    >
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#000",
+              "fontFamily": "System",
+              "fontSize": 16,
+            },
+            Object {
+              "color": "white",
+              "fontSize": 18,
+            },
+          ]
+        }
+        uppercase={false}
+      >
+        LOGIN
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "height": 40,
+          "justifyContent": "center",
+          "width": 298,
         }
       }
     >
       <View
         style={
+          Object {
+            "backgroundColor": "black",
+            "flex": 2,
+            "height": 1,
+          }
+        }
+      />
+      <Text
+        style={
           Array [
-            Object {},
+            Object {
+              "color": "#000",
+              "fontFamily": "System",
+              "fontSize": 16,
+            },
+            Object {
+              "flex": 1,
+              "textAlign": "center",
+            },
           ]
         }
+        uppercase={false}
       >
-        <Text
-          style={
-            Array [
-              Object {
-                "color": "#007AFF",
-                "fontSize": 18,
-                "padding": 8,
-                "textAlign": "center",
-              },
-            ]
+        OR
+      </Text>
+      <View
+        style={
+          Object {
+            "backgroundColor": "black",
+            "flex": 2,
+            "height": 1,
           }
-        >
-          Sign Up
-        </Text>
-      </View>
+        }
+      />
+    </View>
+    <View
+      accessible={true}
+      isTVSelectable={true}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "rgb(249, 238, 238)",
+          "borderRadius": 6,
+          "height": 45,
+          "justifyContent": "center",
+          "opacity": 1,
+          "width": 300,
+        }
+      }
+    >
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#000",
+              "fontFamily": "System",
+              "fontSize": 16,
+            },
+            Object {
+              "color": "rgb(221, 97, 97)",
+              "fontSize": 18,
+            },
+          ]
+        }
+        uppercase={false}
+      >
+        SIGNUP
+      </Text>
     </View>
   </View>
 </View>
+`;
+
+exports[`renders the Image component 1`] = `
+<Image
+  style={
+    Object {
+      "height": 240,
+      "width": 320,
+    }
+  }
+/>
 `;

@@ -110,7 +110,7 @@ export default class LocalList extends Component {
                         </List>
                     </View>
                     <View style={{ flex:1}}>
-                        <Button rounded primary onPress={() => this.showRestaurantInfo()}>
+                        <Button style={{backgroundColor:"rgb(234, 195, 176)"}}rounded primary onPress={() => this.showRestaurantInfo()}>
                             <Text>Roll the dice!</Text>
                         </Button>
                     </View>
