@@ -4,6 +4,9 @@ import {Platform , FlatList, Linking, Dimensions, View, TouchableOpacity} from '
 import { List, ListItem } from 'react-native-elements';
 import {Container, Header, Body, Left,Right, Button, Picker, Item, Input, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
+import * as firebase from 'firebase';
+
+// Get a reference to the database service
 
 export default class LocalList extends Component {
     /**
@@ -19,6 +22,7 @@ export default class LocalList extends Component {
             sortOrder: "",
             showOpenNow:false,
             searchPrice:"1",
+            email:"kle11@illinois",
 
         }
         this.onPress = this.onPress.bind(this);
@@ -33,6 +37,11 @@ export default class LocalList extends Component {
         // if(this.props.navigation.getParam('selectedList')){
         //     listPassed =
         // }
+        // var userId = firebase.auth().currentUser.uid;
+        // return firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+        //     var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
+        //     // ...
+        // });
         let tempContent = 'restaurants';
         if(this.props.navigation.getParam('searchContent')){
             tempContent = this.props.navigation.getParam('searchContent')
@@ -53,26 +62,54 @@ export default class LocalList extends Component {
         if(this.props.navigation.getParam('searchPrice')){
             tempPrice = this.props.navigation.getParam('searchPrice')
         }
-        this.setState({
-            localList: this.props.navigation.getParam('selectedList'),
-            searchContent: tempContent,
-            searchLocation: tempLocation,
-            sortOrder: tempOrder,
-            showOpenNow: tempOpenNow,
-            searchPrice: tempPrice
+        let tempEmail = "kle11@illinois";
+        if(this.props.navigation.getParam('email')){
+            tempEmail = this.props.navigation.getParam('email')
+        }
+        let tempList = this.props.navigation.getParam('selectedList');
+        firebase.database().ref('users/' + tempEmail).on('value', (snapshot)=> {
+            // updateStarCount(postElement, snapshot.val());
+            // console.log(tempEmail);
+            console.log(tempList);
+            console.log(snapshot.val());
+            tempList = snapshot.val().list;
+            this.setState({
+                localList: tempList,
+                searchContent: tempContent,
+                searchLocation: tempLocation,
+                sortOrder: tempOrder,
+                showOpenNow: tempOpenNow,
+                searchPrice: tempPrice,
+                email: tempEmail
+            });
+            console.log(this.state.localList);
+
         });
 
     }
     onPress() {
-        this.props.navigation.replace('Restaurants', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation , 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice });
+        this.props.navigation.replace('Restaurants', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation , 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice, 'email': this.state.email });
     }
     delete(item) {
         this.state.localList.splice(this.state.localList.indexOf(item), 1 );
-        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice  });
+        // A post entry.
+        var postData = {
+            email: this.state.email,
+            list: this.state.localList,
+        };
+        // Get a key for a new Post.
+        var newPostKey = firebase.database().ref().child('users/'+this.state.email).push().key;
+
+        // Write the new post's data simultaneously in the posts list and the user's post list.
+        var updates = {};
+        updates['users/'+this.state.email] = postData;
+
+        firebase.database().ref().update(updates);
+        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice, 'email': this.state.email  });
     }
     showRestaurantInfo(){
         let randomid=this.state.localList[Math.floor(this.state.localList.length*Math.random())].id;
-        this.props.navigation.push('RestaurantDetail', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'selectedID': randomid, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice });
+        this.props.navigation.push('RestaurantDetail', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'selectedID': randomid, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice, 'email': this.state.email });
     }
     render() {
         return (

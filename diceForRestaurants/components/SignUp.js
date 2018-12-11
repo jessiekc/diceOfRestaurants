@@ -17,6 +17,7 @@ firebase.initializeApp({
     messagingSenderId: "1048362502940"
 });
 
+
 export default class SignUp extends Component {
     /**
      * constructor for restaurant detail
@@ -38,7 +39,7 @@ export default class SignUp extends Component {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(()=>{
                 this.setState({error:'',loading:false});
-                this.props.navigation.replace('Restaurants')
+                this.props.navigation.replace('Restaurants', {'email': this.state.email.split(".")[0]})
             })
             .catch(()=> {
                 this.setState({error:'Authentication failed',loading:false});
@@ -50,6 +51,12 @@ export default class SignUp extends Component {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(()=>{
                 this.setState({error:'',loading:false});
+                console.log(email);
+                var tempString = 'users/'+email.split(".")[0];
+                firebase.database().ref(tempString).set({
+                    email: email,
+                    list: []
+                });
                 this.props.navagition.replace('Restaurants')
             })
             .catch(()=> {

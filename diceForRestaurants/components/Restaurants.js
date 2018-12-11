@@ -4,6 +4,7 @@ import { List, ListItem ,CheckBox, ButtonGroup} from 'react-native-elements';
 import {Container, Header, Body, Left, Right, Button, Picker, Item, Input, Text} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
+import * as firebase from 'firebase';
 
 token="FssaySoD_y-Ey_-kuN141a_nedlgL1KXTGw1QeLGmxKyciYFX4-bswEJgVC9lXa1JJep4hr5H0cZ-8p82h2R7mmkuscNz_ST8-ycmS44EqQ2U8PghgFaJVKxtzPqW3Yx";
 
@@ -22,6 +23,7 @@ export default class Restaurants extends Component {
             sortOrder: "",
             showOpenNow:false,
             searchPrice: "1",
+            email:"kle11@illinois"
         }
         axios.defaults.headers.common['Authorization'] = "Bearer "+token;
         this.add=this.add.bind(this);
@@ -41,10 +43,6 @@ export default class Restaurants extends Component {
         if(this.props.navigation.getParam('searchLocation')){
             tempLocation = this.props.navigation.getParam('searchLocation')
         }
-        let tempList =[];
-        if(this.props.navigation.getParam('selectedList')){
-            tempList = this.props.navigation.getParam('selectedList');
-        }
         let tempOrder = 'best_match';
         if(this.props.navigation.getParam('sortOrder')){
             tempOrder = this.props.navigation.getParam('sortOrder')
@@ -57,32 +55,63 @@ export default class Restaurants extends Component {
         if(this.props.navigation.getParam('searchPrice')){
             tempPrice = this.props.navigation.getParam('searchPrice')
         }
+        let tempEmail = "kle11@illinois";
+        if(this.props.navigation.getParam('email')){
+            tempEmail = this.props.navigation.getParam('email')
+        }
         axios.get(`https://api.yelp.com/v3/businesses/search?term=`+tempContent+`&location=`+tempLocation+`&sort_by=`+tempOrder+`&open_now=`+tempOpenNow+`&price=`+tempPrice)
             .then((response) => {
                 this.setState({
                     searchResult: response.data.businesses,
-                    localList: tempList,
                     searchLocation:tempLocation,
                     searchContent: tempContent,
                     sortOrder: tempOrder,
                     showOpenNow: tempOpenNow,
-                    searchPrice: tempPrice
+                    searchPrice: tempPrice,
+                    email: tempEmail
                 });
             });
+        let tempList = this.props.navigation.getParam('selectedList');
+        firebase.database().ref('users/' + tempEmail).on('value', (snapshot)=> {
+            // updateStarCount(postElement, snapshot.val());
+            // console.log(tempEmail);
+            console.log(tempList);
+            console.log(snapshot.val());
+            tempList = snapshot.val().list;
+            this.setState({
+                localList: tempList,
+            });
+            console.log(this.state.localList);
+
+        });
     }
 
     add(item) {
         console.log(item);
         this.state.localList.push(item);
+        // A post entry.
+        var postData = {
+            email: this.state.email,
+            list: this.state.localList,
+        };
+        // Get a key for a new Post.
+        var newPostKey = firebase.database().ref().child('users/'+this.state.email).push().key;
+
+        // Write the new post's data simultaneously in the posts list and the user's post list.
+        var updates = {};
+        updates['users/'+this.state.email] = postData;
+
+        firebase.database().ref().update(updates);
+
         console.log(this.state.localList);
-        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow , 'searchPrice': this.state.searchPrice });
+        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow , 'searchPrice': this.state.searchPrice , 'email': this.state.email });
     }
 
     gotoList(){
-        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice });
+        this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice , 'email': this.state.email });
     }
     searchByCategory(){
-        this.props.navigation.replace('Restaurants', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice });
+        this.props.navigation.replace('Restaurants', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow, 'searchPrice': this.state.searchPrice , 'email': this.state.email });
     }
     sortChange(sortValue) {
         this.setState({
