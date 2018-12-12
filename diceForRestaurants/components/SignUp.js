@@ -51,7 +51,6 @@ export default class SignUp extends Component {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(()=>{
                 this.setState({error:'',loading:false});
-                console.log(email);
                 var tempString = 'users/'+email.split(".")[0];
                 firebase.database().ref(tempString).set({
                     email: email,

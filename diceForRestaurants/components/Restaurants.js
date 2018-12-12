@@ -71,13 +71,12 @@ export default class Restaurants extends Component {
                     email: tempEmail
                 });
             });
-        let tempList = this.props.navigation.getParam('selectedList');
+        let tempList = [];
         firebase.database().ref('users/' + tempEmail).on('value', (snapshot)=> {
             // updateStarCount(postElement, snapshot.val());
-            // console.log(tempEmail);
-            console.log(tempList);
-            console.log(snapshot.val());
-            tempList = snapshot.val().list;
+            if(snapshot.val().list){
+                tempList = snapshot.val().list;
+            }
             this.setState({
                 localList: tempList,
             });
@@ -87,7 +86,7 @@ export default class Restaurants extends Component {
     }
 
     add(item) {
-        console.log(item);
+        console.log(this.state.localList);
         this.state.localList.push(item);
         // A post entry.
         var postData = {
@@ -103,7 +102,6 @@ export default class Restaurants extends Component {
 
         firebase.database().ref().update(updates);
 
-        console.log(this.state.localList);
         this.props.navigation.replace('LocalList', {'selectedList': this.state.localList, 'searchContent': this.state.searchContent, 'searchLocation': this.state.searchLocation, 'sortOrder': this.state.sortOrder, 'showOpenNow': this.state.showOpenNow , 'searchPrice': this.state.searchPrice , 'email': this.state.email });
     }
 
@@ -124,7 +122,6 @@ export default class Restaurants extends Component {
                 this.setState({
                     searchResult:response.data.businesses
                 });
-                console.log(this.state.searchResult);
             }.bind(this));
     }
     openNowChange(){

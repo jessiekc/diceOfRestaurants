@@ -4,9 +4,9 @@ import { Avatar } from 'react-native-elements';
 import { List, ListItem } from 'react-native-elements';
 import {Container, Header, Body, Left, Right, Button, Picker, Item, Input, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryPie, VictoryGroup, VictoryCandlestick } from 'victory-native';
 import { Rating } from 'react-native-ratings';
 import axios from 'axios';
-
 //reference: https://www.youtube.com/watch?v=9g_73wEbX8E&t=505s
 
 
@@ -26,6 +26,8 @@ export default class RestaurantDetail extends Component {
             restaurantAddress: "",
             restaurantPhotos: [],
             restaurantRate:1,
+            hours:[],
+            reviews:[],
         }
         axios.defaults.headers.common['Authorization'] = "Bearer "+"FssaySoD_y-Ey_-kuN141a_nedlgL1KXTGw1QeLGmxKyciYFX4-bswEJgVC9lXa1JJep4hr5H0cZ-8p82h2R7mmkuscNz_ST8-ycmS44EqQ2U8PghgFaJVKxtzPqW3Yx";
         this.renderSection=this.renderSection.bind(this);
@@ -51,6 +53,7 @@ export default class RestaurantDetail extends Component {
         if(this.props.navigation.getParam('selectedID')){
             tempID = this.props.navigation.getParam('selectedID');
         }
+        console.log(tempID);
         axios.get(`https://api.yelp.com/v3/businesses/`+tempID)
             .then((response) => {
                 this.setState({
@@ -60,8 +63,35 @@ export default class RestaurantDetail extends Component {
                     searchContent: tempContent,
                     restaurantAddress: response.data.location.display_address.toString(),
                     restaurantPhotos: response.data.photos,
-                    restaurantRate: response.data.rating
+                    restaurantRate: response.data.rating,
+
                 });
+                if(response.data.hours){
+                    this.setState({
+                        hours:[
+                            {x: "Sun.", open: response.data.hours[0].open[0].start/100, close: response.data.hours[0].open[0].end/100, high: response.data.hours[0].open[0].end/100, low: response.data.hours[0].open[0].start/100},
+                            {x: "Mon.", open: response.data.hours[0].open[1].start/100, close: response.data.hours[0].open[1].end/100, high: response.data.hours[0].open[1].end/100, low: response.data.hours[0].open[1].start/100},
+                            {x: "Tue.",  open: response.data.hours[0].open[2].start/100, close: response.data.hours[0].open[2].end/100, high: response.data.hours[0].open[2].end/100, low: response.data.hours[0].open[2].start/100},
+                            {x: "Wed.",  open: response.data.hours[0].open[3].start/100, close: response.data.hours[0].open[3].end/100, high: response.data.hours[0].open[3].end/100, low: response.data.hours[0].open[3].start/100},
+                            {x: "Thur.", open: response.data.hours[0].open[4].start/100, close: response.data.hours[0].open[4].end/100, high: response.data.hours[0].open[4].end/100, low: response.data.hours[0].open[4].start/100},
+                            {x: "Fri.",  open: response.data.hours[0].open[5].start/100, close: response.data.hours[0].open[5].end/100, high: response.data.hours[0].open[5].end/100, low: response.data.hours[0].open[5].start/100},
+                            {x: "Sat.",  open: response.data.hours[0].open[6].start/100, close: response.data.hours[0].open[6].end/100, high: response.data.hours[0].open[6].end/100, low: response.data.hours[0].open[6].start/100}]
+                    })
+                }
+                console.log("1234");
+                console.log(response.data);
+                console.log(this.state.hours);
+
+            });
+        axios.get(`https://api.yelp.com/v3/businesses/`+tempID+`/reviews`)
+            .then((response) => {
+                this.setState({
+                    reviews: response.data.reviews
+                });
+                console.log("1234");
+                console.log(response.data);
+                console.log(this.state.hours);
+
             });
     }
     renderSectionOne = () =>{
@@ -77,6 +107,8 @@ export default class RestaurantDetail extends Component {
     }
 
     renderSection = () =>{
+        console.log(this.state.searchResult);
+        console.log("1234");
 
         return(
             <View style = {{flexDirection:'row', flexWrap: 'wrap', marginTop: 20}}>
@@ -88,7 +120,7 @@ export default class RestaurantDetail extends Component {
 
     render() {
         return (
-                <View style={{backgroundColor:"white"}}>
+                <ScrollView style={{backgroundColor:"white"}}>
                     <View style={{flexDirection: 'row', paddingTop:20, marginBottom: 10}}>
                         <View style={{flex: 1, alignItems: 'center'}}>
                             <Image
@@ -142,11 +174,39 @@ export default class RestaurantDetail extends Component {
                         />
                     </View>
                     {this.renderSection()}
-                </View>
+                    <List>
+                        <FlatList
+                            data={this.state.reviews}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item }) => (
+                                <ListItem
+                                    title ={item.user.name}
+                                    avatar={{uri: item.user.image_url}}
+                                    subtitle = {item.text}
+                                    onPress={() => { Linking.openURL(item.url) }}
+                                />
+                            )}
+                        />
+                    </List>
+                    <View>
+                        <VictoryChart
+                            theme={VictoryTheme.grayscale}
+                            domainPadding={{ x: 25 }}
+                        >
+                        <VictoryCandlestick
+                            style={{
+                                data: {fill: "rgb(234, 195, 176)"},
+                                labels: {fontSize: 12},
+                                parent: {border: "1px solid #ccc"}
+                            }}
+                            labels={(d) => `${d.open} - ${d.close}`}
+                            data={this.state.hours}
+                            domain={{y: [0, 24]}}
+                        />
+                        </VictoryChart>
+                    </View>
 
-
-
-
+                </ScrollView>
         );
     }
 }

@@ -69,9 +69,6 @@ export default class LocalList extends Component {
         let tempList = this.props.navigation.getParam('selectedList');
         firebase.database().ref('users/' + tempEmail).on('value', (snapshot)=> {
             // updateStarCount(postElement, snapshot.val());
-            // console.log(tempEmail);
-            console.log(tempList);
-            console.log(snapshot.val());
             tempList = snapshot.val().list;
             this.setState({
                 localList: tempList,
@@ -82,8 +79,6 @@ export default class LocalList extends Component {
                 searchPrice: tempPrice,
                 email: tempEmail
             });
-            console.log(this.state.localList);
-
         });
 
     }
